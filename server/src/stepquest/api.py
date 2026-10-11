@@ -8,7 +8,8 @@ turns that into a 400 response with the message.
 from datetime import date, timedelta
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Header, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from pydantic import BaseModel, Field
 
 from . import auth, social, steps
@@ -39,10 +40,12 @@ class FriendRequest(BaseModel):
 
 # ---- who is calling ----
 
-def current_user(authorization: Annotated[str, Header()] = "", db=Depends(get_db)):
+bearer = HTTPBearer(auto_error=False)  # also adds the Authorize button to /docs
+
+
+def current_user(creds: HTTPAuthorizationCredentials | None = Depends(bearer), db=Depends(get_db)):
     """Reads 'Authorization: Bearer <token>' and returns the user row."""
-    token = authorization.removeprefix("Bearer ").strip()
-    user = auth.user_from_token(db, token) if token else None
+    user = auth.user_from_token(db, creds.credentials) if creds else None
     if not user:
         raise HTTPException(401, "Log in first")
     return user
