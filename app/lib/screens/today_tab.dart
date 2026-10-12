@@ -13,6 +13,7 @@ class TodayTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return LoadView<Map<String, dynamic>>(
       load: api.me,
+      autoRefresh: const Duration(seconds: 5),
       builder: (context, me, reload) {
         final text = Theme.of(context).textTheme;
         final total = me['total'] as int;

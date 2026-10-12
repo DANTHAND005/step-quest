@@ -38,6 +38,7 @@ class _LeaderboardTabState extends State<LeaderboardTab> {
           child: LoadView<List<dynamic>>(
             key: ValueKey(_range), // switching range reloads
             load: () => widget.api.leaderboard(_range),
+            autoRefresh: const Duration(seconds: 5),
             builder: (context, rows, reload) => ListView(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 12),

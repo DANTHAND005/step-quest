@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 /// 1234567 -> "1,234,567"
@@ -28,9 +30,12 @@ class Avatar extends StatelessWidget {
 ///
 /// Every tab uses this, so a new screen only needs a [load] and a [builder].
 class LoadView<T> extends StatefulWidget {
-  const LoadView({super.key, required this.load, required this.builder});
+  const LoadView({super.key, required this.load, required this.builder, this.autoRefresh});
 
   final Future<T> Function() load;
+
+  /// Reload quietly on this interval, e.g. so new steps show up on their own.
+  final Duration? autoRefresh;
 
   /// Build the screen from the data. Call `reload` after changing something.
   final Widget Function(BuildContext context, T data, Future<void> Function() reload) builder;
@@ -48,9 +53,19 @@ class _LoadViewState<T> extends State<LoadView<T>> {
   void initState() {
     super.initState();
     _reload();
+    final every = widget.autoRefresh;
+    if (every != null) _timer = Timer.periodic(every, (_) => _reload(quiet: true));
   }
 
-  Future<void> _reload() async {
+  Timer? _timer;
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _reload({bool quiet = false}) async {
     try {
       final data = await widget.load();
       if (!mounted) return;
@@ -66,7 +81,7 @@ class _LoadViewState<T> extends State<LoadView<T>> {
         _loading = false;
       });
       // Already showing data? Keep it and just mention the problem.
-      if (_data != null) {
+      if (_data != null && !quiet) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$e')));
       }
     }
