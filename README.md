@@ -15,7 +15,7 @@ reads Apple Health                server/                                 app/
 | `server/` | The Python API. All game logic and tests live here. |
 | `app/` | The Flutter app: log in, today's steps and coins, leaderboard, friends, profile. |
 | `shortcut/` | How to build the iPhone Shortcut that sends your steps. |
-| `docs/` | The user manual, the architecture doc, and the Sprint 1 retrospective (Marp slides). |
+| `docs/` | Marp slides: the user manual, the architecture doc, the walkthrough (`how_it_works.md`), and the Sprint 1 retrospective. |
 
 ## Run the server
 
