@@ -85,6 +85,18 @@ def post_steps(body: StepsUpload, user: User, db: Db):
     return steps.summary(db, user["id"])
 
 
+class TodaySteps(BaseModel):
+    steps: int = Field(ge=0, le=100_000)
+
+
+@router.post("/steps/today")
+def post_today(body: TodaySteps, user: User, db: Db):
+    """Body: {"steps": 8423}. The easy one for the iPhone Shortcut.
+    Uses the server's date, which matches the phone when both are in the same time zone."""
+    steps.save_steps(db, user["id"], date.today(), body.steps)
+    return steps.summary(db, user["id"])
+
+
 # ---- friends ----
 
 @router.get("/friends")

@@ -50,3 +50,11 @@ def test_bad_batch_saves_nothing(client, make_user):
     future = (date.today() + timedelta(days=5)).isoformat()
     client.post("/steps", json={"days": [{"date": TODAY, "steps": 500}, {"date": future, "steps": 1}]}, headers=h)
     assert client.get("/me", headers=h).json()["total"] == 0
+
+
+def test_post_today_shortcut_route(client, make_user):
+    h = make_user("dan")
+    r = client.post("/steps/today", json={"steps": 2500}, headers=h)
+    assert r.json()["today"] == 2500
+    assert r.json()["coins"] == 20
+    assert client.post("/steps/today", json={"steps": -5}, headers=h).status_code == 422
