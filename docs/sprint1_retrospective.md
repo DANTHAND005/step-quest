@@ -55,7 +55,7 @@ First real sync: **1,067 steps → 10 coins.**
 ## What went well
 
 - **Simple structure paid off.** Logic files never touch HTTP, so every rule was easy to test.
-- **Tests caught problems early.** The server had 41 passing tests before the app existed.
+- **Tests caught problems early.** The server had 39 passing tests before the app existed.
 - **Server-side checks.** Step limits, token checks and login lockout were in from day one.
 - **Saving per day instead of adding.** Syncing the same day twice replaces the number, so the Shortcut can run as often as it wants.
 - **Cutting scope.** Moving crates to Sprint 2 meant the core loop actually works.
