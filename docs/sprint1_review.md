@@ -24,6 +24,8 @@ github.com/DANTHAND005/step-quest
 
 First real sync: **1,067 steps → 10 coins**
 
+Demo video: [sprint1_demo.mp4](https://github.com/DANTHAND005/step-quest/blob/main/docs/sprint1_demo.mp4)
+
 ---
 
 # Sprint 1 metrics
